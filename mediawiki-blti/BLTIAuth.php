@@ -24,13 +24,11 @@ $wgExtensionCredits['other'][] = array(
 );
  
 require_once dirname(__FILE__) . '/../includes/GlobalFunctions.php';
-if (isset($_REQUEST['BLTI'])) {
-    session_cache_limiter( 'priva te, must-revalidate' );
-    wfSuppressWarnings();
-    session_start();
-    wfRestoreWarnings();
-}
 
+session_cache_limiter( 'priva te, must-revalidate' );
+wfSuppressWarnings();
+session_start();
+wfRestoreWarnings();
 // The Hook (R)
 $wgHooks['UserLoadFromSession'][] = 'AutoAuthenticateBLTI';
 

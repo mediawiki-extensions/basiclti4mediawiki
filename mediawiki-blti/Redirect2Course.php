@@ -24,6 +24,7 @@ if($context->valid) {
 	$agentEmail = $context->getUserEmail();
 	$agentFullName = $context->getUserName();
 	$going2MW = true;
+        session_start();
 	$_SESSION['BLTIclassroom'] = $agentCourse;
 }
 else {
