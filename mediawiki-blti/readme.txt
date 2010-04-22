@@ -4,6 +4,8 @@
 2) Edit LocalSettings.php and add the Authentication Extension  at the end
 
 include("extensions/BLTIAuth.php");
+include("extensions/CatLinkAtBottom.php");
+include("extensions/KillLogout.php");
 
 3) Configure BLTI:
 Remote Tool URL: http://url/mediawiki/extensions/Redirect2Course.php
