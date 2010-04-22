@@ -39,4 +39,25 @@ function putCatLinkAtBottom(&$textbox, &$title)
     return true;
 }
 
+$wgHooks['SkinBuildSidebar'][] = 'changeMainCategory';
+
+function changeMainCategory($skin, &$sidebar)
+{
+    if (isset($_SESSION['BLTIclassroom'])) {
+    
+        $myClassRoom = $_SESSION['BLTIclassroom'];
+
+        $mp = $sidebar['navigation'][0]['href'];
+        $sidebar['navigation'][0]['href'] = str_replace('Main_Page', 'Course:'.$myClassRoom, $mp);
+        unset($sidebar['navigation'][1]);  // Community Portal
+        unset($sidebar['navigation'][2]);  // Current Events
+        unset($sidebar['navigation'][4]);  // Random
+
+        // $textbox = $textbox . "\n\n[[Course:$myClassRoom]]";
+    }
+    
+    return true;
+}
+
+
 ?>
