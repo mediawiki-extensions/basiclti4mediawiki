@@ -1,11 +1,12 @@
 <?php
 /**
- * MediaWiki Authentication via BLTI extension
+ * MediaWiki Authentication via Basic LTI extension
  *
  * @file
  * @ingroup Extensions
  * @version 1.2
- * @author Antoni Bertran based on Jose Diago
+ * @author Charles Severancee, Based on Jose Diago's OKI Extension
+ * @author Jose Diago, based on Ioannis Yessios's CAS Authentication Extension
  */
 
 $_pwdSecret = "spasiva danke gracias thanks"; // Secret phrase for password generation
@@ -16,17 +17,19 @@ if( !defined( 'MEDIAWIKI' ) )
 // Extension credits that will show up on Special:Version
 $wgExtensionCredits['other'][] = array(
 	'name' => 'Authentication via BLTI',
-	'version' => '0.1',
-	'author' => 'Antoni Bertran',
+	'version' => '1.1',
+	'author' => 'Charles Severance, Jose Diago',
 	'url' => 'http://www.mediawiki.org',
 	'description' => 'Auto-authenticates users via BLTI',
 );
  
 require_once dirname(__FILE__) . '/../includes/GlobalFunctions.php';
-session_cache_limiter( 'priva te, must-revalidate' );
-	wfSuppressWarnings();
-	session_start();
-	wfRestoreWarnings();
+if (isset($_REQUEST['BLTI'])) {
+    session_cache_limiter( 'priva te, must-revalidate' );
+    wfSuppressWarnings();
+    session_start();
+    wfRestoreWarnings();
+}
 
 // The Hook (R)
 $wgHooks['UserLoadFromSession'][] = 'AutoAuthenticateBLTI';
@@ -77,15 +80,8 @@ function AutoAuthenticateBLTI( $user, &$result ) {
     else if ($_REQUEST['title'] == 'Special:Userlogout') {
         $user->logout();
     }
-    /*else if (isset($_SESSION['session_id_lms_oki']) && isset($_COOKIE['lmsOkiAuthenticated']) && $_SESSION['session_id_lms_oki'] == $_COOKIE['lmsOkiAuthenticated']) {
-        //Delete session OKI and logout
-        unset($_SESSION['session_id_lms_oki']);
-        unset($_SESSION['OKIclassroom']);
-        $user->logout();
-    }*/
 
     return true;
-
 }
 
 // generate a unique password based on the username

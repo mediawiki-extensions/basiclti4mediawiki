@@ -5,7 +5,7 @@
  * @file
  * @ingroup Extensions
  * @version 0.1
- * @author Antoni Bertran based on code Jose Diago
+ * @author Charles Severance based on for from Antoni Bertran and Jose Diago
  */
 
 $going2MW = false;
