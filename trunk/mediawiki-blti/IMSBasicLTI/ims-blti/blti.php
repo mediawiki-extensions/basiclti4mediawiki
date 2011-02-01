@@ -178,11 +178,21 @@ class BLTI {
         }
 
         if ( $this->valid && $doredirect ) {
-            $host = $_SERVER['HTTP_HOST'];
-            $uri = $_SERVER['PHP_SELF'];
-            header("Location: http://$host$uri");
+            $this->redirect();
             $this->complete = true;
         }
+    }
+
+    function addSession($location) {
+        if ( ini_get('session.use_cookies') == 0 ) {
+            if ( strpos($location,'?') > 0 ) {
+               $location = $location . '&';
+            } else {
+               $location = $location . '?';
+            }
+            $location = $location . session_name() . '=' . session_id();
+        }
+        return $location;
     }
 
     function isInstructor() {
@@ -231,6 +241,30 @@ class BLTI {
         return false;
     }
 
+    function getUserImage() {
+        $image = $this->info['user_image'];
+        if ( strlen($image) > 0 ) return $image;
+        $email = $this->getUserEmail();
+        if ( $email === false ) return false;
+        $size = 40;
+        $grav_url = $_SERVER['HTTPS'] ? 'https://' : 'http://';
+        $grav_url = $grav_url . "www.gravatar.com/avatar.php?gravatar_id=".md5( strtolower($email) )."&size=".$size;
+        return $grav_url;
+    }
+
+    function getResourceKey() {
+        $oauth = $this->info['oauth_consumer_key'];
+        $id = $this->info['resource_link_id'];
+        if ( strlen($id) > 0 and strlen($oauth) > 0 ) return $oauth . ':' . $id;
+        return false;
+    }
+
+    function getResourceTitle() {
+        $title = $this->info['resource_link_title'];
+        if ( strlen($title) > 0 ) return $title;
+        return false;
+    }
+
     function getConsumerKey() {
         $oauth = $this->info['oauth_consumer_key'];
         return $oauth;
@@ -258,7 +292,10 @@ class BLTI {
     function redirect() {
             $host = $_SERVER['HTTP_HOST'];
             $uri = $_SERVER['PHP_SELF'];
-            header("Location: http://$host$uri");
+            $location = $_SERVER['HTTPS'] ? 'https://' : 'http://';
+            $location = $location . $host . $uri;
+            $location = $this->addSession($location);
+            header("Location: $location");
     }
 
     function dump() { 
@@ -269,10 +306,13 @@ class BLTI {
         } else {
             $ret .= "isInstructor() = false\n";
         }
+        $ret .= "getUserKey() = ".$this->getUserKey()."\n";
         $ret .= "getUserEmail() = ".$this->getUserEmail()."\n";
         $ret .= "getUserShortName() = ".$this->getUserShortName()."\n";
         $ret .= "getUserName() = ".$this->getUserName()."\n";
-        $ret .= "getUserKey() = ".$this->getUserKey()."\n";
+        $ret .= "getUserImage() = ".$this->getUserImage()."\n";
+        $ret .= "getResourceKey() = ".$this->getResourceKey()."\n";
+        $ret .= "getResourceTitle() = ".$this->getResourceTitle()."\n";
         $ret .= "getCourseName() = ".$this->getCourseName()."\n";
         $ret .= "getCourseKey() = ".$this->getCourseKey()."\n";
         $ret .= "getConsumerKey() = ".$this->getConsumerKey()."\n";
