@@ -89,15 +89,16 @@ function map_keyname($key) {
     return $newkey;
 }
 
-function signParameters($oldparms, $endpoint, $method, $oauth_consumer_key, $oauth_consumer_secret, $submit_text, $org_id, $org_desc)
+function signParameters($oldparms, $endpoint, $method, $oauth_consumer_key, $oauth_consumer_secret, 
+    $submit_text = false, $org_id = false, $org_desc = false)
 {
     global $last_base_string;
     $parms = $oldparms;
-    $parms["lti_version"] = "LTI-1p0";
-    $parms["lti_message_type"] = "basic-lti-launch-request";
+    if ( ! isset($parms["lti_version"]) ) $parms["lti_version"] = "LTI-1p0";
+    if ( ! isset($parms["lti_message_type"]) ) $parms["lti_message_type"] = "basic-lti-launch-request";
     if ( $org_id ) $parms["tool_consumer_instance_guid"] = $org_id;
     if ( $org_desc ) $parms["tool_consumer_instance_description"] = $org_desc;
-    $parms["ext_submit"] = $submit_text;
+    if ( $submit_text ) $parms["ext_submit"] = $submit_text;
 
     $test_token = '';
 
@@ -194,3 +195,25 @@ function postLaunchHTML($newparms, $endpoint, $debug=false, $iframeattr=false) {
 function get_string($key,$bundle) {
     return $key;
 }
+
+function do_post_request($url, $data, $optional_headers = null)
+{
+  $params = array('http' => array(
+              'method' => 'POST',
+              'content' => $data
+            ));
+  if ($optional_headers !== null) {
+    $params['http']['header'] = $optional_headers;
+  }
+  $ctx = stream_context_create($params);
+  $fp = @fopen($url, 'rb', false, $ctx);
+  if (!$fp) {
+    throw new Exception("Problem with $url, $php_errormsg");
+  }
+  $response = @stream_get_contents($fp);
+  if ($response === false) {
+    throw new Exception("Problem reading data from $url, $php_errormsg");
+  }
+  return $response;
+}
+
