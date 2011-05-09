@@ -35,5 +35,5 @@ include_once('extensions/CategoryPermissionsBLTI.php');
 
 
 3) Configure BLTI:
-Remote Tool URL: http://url/mediawiki/extensions/Redirect2Course.php
+Remote Tool URL: http://url/mediawiki/extensions/Redirect2CourseBLTI.php
 Password: secret
