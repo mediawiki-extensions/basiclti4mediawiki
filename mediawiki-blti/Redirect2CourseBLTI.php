@@ -35,7 +35,7 @@ $context = null;
 
 if($going2MW) {
 	$myURI = $_SERVER['REQUEST_URI'];
-	$newURI = str_replace("extensions/Redirect2Course.php", "index.php", $myURI);
+	$newURI = str_replace("extensions/Redirect2CourseBLTI.php", "index.php", $myURI);
 	$newParameters = "title=Category:$agentCourse&BLTIusername=$agentUserName&BLTIemail=$agentEmail&BLTIfullname=$agentFullName&BLTI=yes";
 	$newURI = $newURI . "?" . $newParameters;
 	header("Location: $newURI");

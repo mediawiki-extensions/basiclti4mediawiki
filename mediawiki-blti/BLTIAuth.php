@@ -62,7 +62,7 @@ function AutoAuthenticateBLTI( $user, &$result ) {
             if ( 0 == $uid ) {
                 // create a new user
                 $u->addToDatabase();
-                $u->setPassword( genPass($_REQUEST['BLTIfullname'],$_pwdSecret) );
+                $u->setPassword( genPassBLTI($_REQUEST['BLTIfullname'],$_pwdSecret) );
                 $u->setEmail( $_REQUEST['BLTIemail'] );
                 $u->setRealName( $_REQUEST['BLTIfullname'] );
                 $u->setToken();
@@ -83,7 +83,7 @@ function AutoAuthenticateBLTI( $user, &$result ) {
 }
 
 // generate a unique password based on the username
-function genPass($username, $_pwdSecret){
+function genPassBLTI($username, $_pwdSecret){
   return md5($username.$_pwdSecret);
 }
 
